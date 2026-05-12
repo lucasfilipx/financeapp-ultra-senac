@@ -74,6 +74,6 @@ Caso prefira testar a aplicação instantaneamente sem baixar nenhum arquivo ou 
 
 7. O StackBlitz abrirá automaticamente uma janela de visualização à direita com o **FinanceApp Ultra** rodando em tempo real.
 
-## Link Para Visualização Prática do Projeto em Acão:
+## 📹 Link Para Visualização Prática do Projeto em Ação:
 
 **https://youtu.be/OhesP12SZ-g**
