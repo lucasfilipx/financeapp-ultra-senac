@@ -73,3 +73,7 @@ Caso prefira testar a aplicação instantaneamente sem baixar nenhum arquivo ou 
    `node server.js`
 
 7. O StackBlitz abrirá automaticamente uma janela de visualização à direita com o **FinanceApp Ultra** rodando em tempo real.
+
+## Link Para Visualização Prática do Projeto em Acão:
+
+**https://youtu.be/OhesP12SZ-g**
