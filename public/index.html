@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FinanceApp Ultra</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Efeitos de Luz no Fundo -->
+    <div class="ambient-light light-1"></div>
+    <div class="ambient-light light-2"></div>
+
+    <div class="container mt-4 mb-5 position-relative z-1">
+        
+        <!-- Navbar Flutuante Apple-style -->
+        <nav class="navbar-floating d-flex justify-content-between align-items-center px-4 py-3 shadow-glass fade-in-down mb-5">
+            <a class="brand-logo fw-bolder text-white d-flex align-items-center text-decoration-none m-0" href="#">
+                <div class="icon-brand shadow-lime me-3">
+                    <i class="fa-solid fa-bolt text-dark"></i>
+                </div>
+                FINANCE<span class="text-lime">APP</span>
+            </a>
+            
+            <ul class="nav-pills-custom d-flex gap-2 m-0 p-0">
+                <li><a class="nav-btn active" href="#" onclick="mudarAba('home', this)"><i class="fa-solid fa-layer-group"></i> <span class="d-none d-md-inline ms-2">Visão Geral</span></a></li>
+                <li><a class="nav-btn" href="#" onclick="mudarAba('gastos', this)"><i class="fa-solid fa-plus"></i> <span class="d-none d-md-inline ms-2">Registrar</span></a></li>
+                <li><a class="nav-btn" href="#" onclick="mudarAba('transacoes', this)"><i class="fa-solid fa-clock-rotate-left"></i> <span class="d-none d-md-inline ms-2">Extrato</span></a></li>
+            </ul>
+        </nav>
+
+        <!-- Saudação -->
+        <div class="welcome-section fade-in-up mb-4">
+            <h2 class="text-white fw-bolder mb-1">Olá, bem-vindo(a) de volta! <i class="fa-solid fa-hand-sparkles text-warning ms-2"></i></h2>
+            <p class="text-light-gray fs-6">Aqui está o resumo da sua vida financeira hoje.</p>
+        </div>
+
+        <!-- CONTEÚDO PRINCIPAL -->
+        <div class="content-wrapper">
+            
+            <!-- ABA: DASHBOARD -->
+            <div id="aba-home" class="aba-conteudo d-block fade-in-up">
+                <div class="row g-4 mb-5">
+                    <div class="col-md-4">
+                        <div class="widget-glass glow-border h-100 p-4">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <span class="text-uppercase tracking-wider fs-8 text-light-gray fw-bold"><i class="fa-solid fa-wallet text-lime me-2"></i>Meu Saldo</span>
+                            </div>
+                            <h1 id="saldoTotal" class="display-5 fw-bolder text-white mb-0">R$ 0,00</h1>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="widget-glass h-100 p-4 card-hover">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <span class="text-uppercase tracking-wider fs-8 text-light-gray fw-bold"><i class="fa-solid fa-arrow-trend-up text-lime me-2"></i>Ganhos</span>
+                                <div class="icon-box bg-lime-subtle text-lime"><i class="fa-solid fa-arrow-up"></i></div>
+                            </div>
+                            <h2 id="receitasTotal" class="fw-bolder text-white mb-0">R$ 0,00</h2>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="widget-glass h-100 p-4 card-hover">
+                            <div class="d-flex justify-content-between align-items-center mb-4">
+                                <span class="text-uppercase tracking-wider fs-8 text-light-gray fw-bold"><i class="fa-solid fa-arrow-trend-down text-danger me-2"></i>Gastos</span>
+                                <div class="icon-box bg-danger-subtle text-danger"><i class="fa-solid fa-arrow-down"></i></div>
+                            </div>
+                            <h2 id="despesasTotal" class="fw-bolder text-white mb-0">R$ 0,00</h2>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div class="widget-glass p-4 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-4 pb-3 border-bottom border-white-10">
+                                <h5 class="text-white fw-bold m-0"><i class="fa-solid fa-chart-pie text-lime me-2"></i>Análise de Despesas</h5>
+                            </div>
+                            <div class="chart-container d-flex justify-content-center align-items-center" style="height:350px;">
+                                <canvas id="graficoGastos"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4 d-flex flex-column gap-4">
+                        <div class="widget-glass p-4">
+                            <h6 class="text-white fw-bold mb-4"><i class="fa-solid fa-heart-pulse text-danger me-2"></i>Termômetro de Gastos</h6>
+                            <div class="d-flex justify-content-between align-items-end mb-2">
+                                <span class="text-white fs-4 fw-bolder" id="ritmoTexto">0%</span>
+                            </div>
+                            <div class="progress rounded-pill" style="height: 12px; background-color: rgba(255,255,255,0.05);">
+                                <div id="ritmoBarra" class="progress-bar bg-lime progress-bar-striped progress-bar-animated" style="width: 0%"></div>
+                            </div>
+                        </div>
+                        <div class="widget-glass p-4 flex-grow-1">
+                            <h6 class="text-white fw-bold mb-4"><i class="fa-solid fa-fire text-warning me-2"></i>Onde você mais gastou</h6>
+                            <div id="topCategoriasLista" class="d-flex flex-column gap-3"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA: LANÇAR -->
+            <div id="aba-gastos" class="aba-conteudo d-none fade-in-up">
+                <div class="row">
+                    <div class="col-md-8 col-lg-6 mx-auto">
+                        <div class="widget-glass p-5 position-relative overflow-hidden">
+                            <div class="text-center mb-5 position-relative z-1">
+                                <div class="icon-brand shadow-lime mx-auto mb-3" style="width: 70px; height: 70px; font-size: 30px;">
+                                    <i class="fa-solid fa-coins text-dark"></i>
+                                </div>
+                                <h3 class="text-white fw-bolder">Nova Movimentação</h3>
+                            </div>
+
+                            <form id="formTransacao" class="position-relative z-1">
+                                <div class="row g-4">
+                                    <div class="col-12">
+                                        <div class="form-floating-custom">
+                                            <select id="tipo" class="input-modern select-custom" required>
+                                                <option value="" disabled selected></option>
+                                                <option value="receita">Receita (+)</option>
+                                                <option value="despesa">Despesa (-)</option>
+                                            </select>
+                                            <label><i class="fa-solid fa-arrows-rotate me-2 text-lime"></i>Entrada ou Saída?</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-floating-custom">
+                                            <input type="text" id="categoria" class="input-modern" placeholder=" " required>
+                                            <label><i class="fa-solid fa-tags me-2 text-lime"></i>Categoria (Ex: Transporte, Lazer)</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-12">
+                                        <div class="form-floating-custom">
+                                            <input type="text" id="descricao" class="input-modern" placeholder=" " required>
+                                            <label><i class="fa-solid fa-align-left me-2 text-lime"></i>O que foi? (Ex: Pix, Lanche...)</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-6">
+                                        <div class="form-floating-custom">
+                                            <input type="number" id="valor" class="input-modern fw-bolder text-lime fs-5" step="0.01" placeholder=" " required>
+                                            <label><i class="fa-solid fa-brazilian-real-sign me-2 text-lime"></i>Valor Total</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating-custom">
+                                            <input type="date" id="data_transacao" class="input-modern" required>
+                                            <label><i class="fa-regular fa-calendar-days me-2 text-lime"></i>Data da Transação</label>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn-ultra mt-5 w-100 d-flex justify-content-center align-items-center gap-2">
+                                    REGISTRAR AGORA <i class="fa-solid fa-arrow-right"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ABA: EXTRATO (LISTA MODERNA) -->
+            <div id="aba-transacoes" class="aba-conteudo d-none fade-in-up">
+                <div class="row">
+                    <div class="col-lg-10 mx-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="text-white fw-bold m-0"><i class="fa-solid fa-list-ul text-lime me-2"></i>Histórico Completo</h4>
+                        </div>
+                        
+                        <div id="listaTransacoes" class="d-flex flex-column gap-3">
+                            <!-- Preenchido pelo JS -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL DE EDIÇÃO -->
+    <div class="modal fade" id="modalEdicao" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-glass border-lime border-opacity-50">
+                <div class="modal-header border-bottom border-white-10 p-4">
+                    <h5 class="modal-title fw-bold text-white"><i class="fa-solid fa-pen-nib text-lime me-2"></i>Ajustar Registro</h5>
+                    <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <form id="formEdicao">
+                        <input type="hidden" id="edit_id">
+                        <div class="form-floating-custom mb-4">
+                            <select id="edit_tipo" class="input-modern select-custom" required>
+                                <option value="receita">Receita (+)</option>
+                                <option value="despesa">Despesa (-)</option>
+                            </select>
+                            <label>Tipo</label>
+                        </div>
+                        <div class="form-floating-custom mb-4">
+                            <input type="text" id="edit_categoria" class="input-modern" placeholder=" " required>
+                            <label>Categoria</label>
+                        </div>
+                        <div class="form-floating-custom mb-4">
+                            <input type="text" id="edit_descricao" class="input-modern" placeholder=" " required>
+                            <label>Descrição</label>
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-6">
+                                <div class="form-floating-custom">
+                                    <input type="number" id="edit_valor" class="input-modern text-lime fw-bold" step="0.01" placeholder=" " required>
+                                    <label>Valor</label>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                                <div class="form-floating-custom">
+                                    <input type="date" id="edit_data_transacao" class="input-modern" required>
+                                    <label>Data</label>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer border-top border-white-10 p-4">
+                    <button type="button" class="btn btn-dark px-4 rounded-pill py-2" data-bs-dismiss="modal">Cancelar</button>
+                    <!-- AQUI ESTÁ O BOTÃO CORRIGIDO PARA FICAR BRILHANTE E FUNCIONAL -->
+                    <button type="button" class="btn-ultra px-4 py-2" onclick="salvarEdicao()">Atualizar Registro</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.12/dist/sweetalert2.all.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
